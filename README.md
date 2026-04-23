@@ -1,5 +1,10 @@
 # claude-skill-check
 
+[![CI](https://github.com/MukundaKatta/claude-skill-check/actions/workflows/ci.yml/badge.svg)](https://github.com/MukundaKatta/claude-skill-check/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/claude-skill-check.svg)](https://pypi.org/project/claude-skill-check/)
+[![Python](https://img.shields.io/pypi/pyversions/claude-skill-check.svg)](https://pypi.org/project/claude-skill-check/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A small Python linter for [Claude Code](https://claude.ai/code) `SKILL.md` files. It checks:
 
 - YAML frontmatter is present and parses cleanly
