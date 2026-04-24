@@ -9,7 +9,7 @@ description = "Linter for Claude Code SKILL.md files. Validates YAML frontmatter
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Mukunda Katta", email = "mukunda.vjcs6@gmail.com" }]
+authors = [{ name = "Mukunda Katta", email = "mukundkst@gmail.com" }]
 keywords = ["claude", "claude-code", "skill", "anthropic", "linter", "validator", "cli"]
 classifiers = [
   "Development Status :: 3 - Alpha",
