@@ -1,0 +1,42 @@
+name: "claude-skill-check"
+description: "Lint Claude Code SKILL.md files for frontmatter, required fields, description length, and leaked secrets."
+author: "Mukunda Katta"
+
+branding:
+  icon: "check-circle"
+  color: "purple"
+
+inputs:
+  paths:
+    description: "Paths or directories to scan. Multiple space-separated values allowed."
+    required: false
+    default: "."
+  quiet:
+    description: "Only print errors (hide OK lines and warnings)."
+    required: false
+    default: "false"
+  python-version:
+    description: "Python version to set up for the action."
+    required: false
+    default: "3.12"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install claude-skill-check
+      shell: bash
+      run: pip install --quiet claude-skill-check
+
+    - name: Run claude-skill-check
+      shell: bash
+      run: |
+        args=""
+        if [ "${{ inputs.quiet }}" = "true" ]; then
+          args="--quiet"
+        fi
+        claude-skill-check $args ${{ inputs.paths }}
