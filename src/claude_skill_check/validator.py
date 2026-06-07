@@ -20,7 +20,7 @@ FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*(?:\n|$)", re.DOTALL)
 REQUIRED_FIELDS = ("name", "description")
 OPTIONAL_FIELDS = ("allowed-tools", "model", "argument-hint")
 
-NAME_RE = re.compile(r"^[a-z][a-z0-9\-]{0,62}[a-z0-9]$")
+NAME_RE = re.compile(r"^[a-z](?:[a-z0-9\-]{0,62}[a-z0-9])?$")
 MIN_DESCRIPTION_LEN = 20
 MAX_DESCRIPTION_LEN = 1024
 
@@ -123,7 +123,9 @@ def validate_skill_source(source: str, path: str = "<string>") -> ValidationResu
         name = data["name"]
         if not isinstance(name, str):
             result.issues.append(
-                _err("E101", "'name' must be a string", line=_find_line(source, "name:"))
+                _err(
+                    "E101", "'name' must be a string", line=_find_line(source, "name:")
+                )
             )
         elif not NAME_RE.match(name):
             result.issues.append(
@@ -184,11 +186,9 @@ def validate_skill_source(source: str, path: str = "<string>") -> ValidationResu
 
     for label, pat in SECRET_PATTERNS:
         if pat.search(source):
-            result.issues.append(
-                _err("E200", f"possible {label} leaked in skill file")
-            )
+            result.issues.append(_err("E200", f"possible {label} leaked in skill file"))
 
-    body = source[match.end():].strip()
+    body = source[match.end() :].strip()
     if not body:
         result.issues.append(_warn("W300", "skill body is empty after frontmatter"))
 

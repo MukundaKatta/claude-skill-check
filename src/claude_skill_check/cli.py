@@ -82,9 +82,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         filtered: list[ValidationResult] = []
         for r in results:
             if r.errors:
-                filtered.append(
-                    ValidationResult(path=r.path, issues=list(r.errors))
-                )
+                filtered.append(ValidationResult(path=r.path, issues=list(r.errors)))
         output = _format_human(filtered) if filtered else ""
         if output:
             print(output)

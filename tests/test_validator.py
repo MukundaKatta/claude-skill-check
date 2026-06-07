@@ -70,6 +70,36 @@ def test_invalid_name_uppercase() -> None:
     assert "E102" in _codes(result.errors)
 
 
+def test_single_character_name_is_valid() -> None:
+    # A 1-char lowercase name is within the documented "1-64 chars" range.
+    source = textwrap.dedent(
+        """\
+        ---
+        name: a
+        description: A long enough description for this test to pass validation.
+        ---
+        body
+        """
+    )
+    result = validate_skill_source(source)
+    assert result.ok
+    assert "E102" not in _codes(result.errors)
+
+
+def test_name_with_trailing_hyphen_is_invalid() -> None:
+    source = textwrap.dedent(
+        """\
+        ---
+        name: trailing-
+        description: A long enough description for this test to pass validation.
+        ---
+        body
+        """
+    )
+    result = validate_skill_source(source)
+    assert "E102" in _codes(result.errors)
+
+
 def test_short_description_warns() -> None:
     source = textwrap.dedent(
         """\
