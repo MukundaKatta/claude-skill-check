@@ -20,7 +20,12 @@ FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*(?:\n|$)", re.DOTALL)
 REQUIRED_FIELDS = ("name", "description")
 OPTIONAL_FIELDS = ("allowed-tools", "model", "argument-hint")
 
-NAME_RE = re.compile(r"^[a-z][a-z0-9\-]{0,62}[a-z0-9]$")
+# A valid skill name is lowercase kebab-case: it must start with a letter,
+# contain only lowercase letters, digits, and hyphens, may not end with a
+# hyphen, and is 1-64 characters long. The optional trailing group makes a
+# single-character name (e.g. "a") valid, matching the documented "1-64 chars"
+# contract.
+NAME_RE = re.compile(r"^[a-z]([a-z0-9\-]{0,62}[a-z0-9])?$")
 MIN_DESCRIPTION_LEN = 20
 MAX_DESCRIPTION_LEN = 1024
 
