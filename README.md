@@ -46,6 +46,8 @@ claude-skill-check --quiet path/to/skills-dir/
 
 ## Use as a library
 
+Validate a single file on disk:
+
 ```python
 from claude_skill_check import validate_skill_file
 
@@ -54,6 +56,39 @@ if not result.ok:
     for issue in result.errors:
         print(issue.code, issue.message)
 ```
+
+Validate raw text without touching the filesystem:
+
+```python
+from claude_skill_check import validate_skill_source
+
+source = "---\nname: my-skill\ndescription: A long enough description here.\n---\n\nBody"
+result = validate_skill_source(source)
+print(result.ok)            # True
+print(result.warnings)      # list[Issue]
+```
+
+Validate many paths at once:
+
+```python
+from claude_skill_check import validate_paths
+
+results = validate_paths(["a/SKILL.md", "b/SKILL.md"])
+failed = [r for r in results if not r.ok]
+```
+
+### Public API
+
+| Symbol                  | Description                                                            |
+|-------------------------|-----------------------------------------------------------------------|
+| `validate_skill_file(path)`   | Validate a `SKILL.md` file on disk; returns a `ValidationResult`. |
+| `validate_skill_source(text, path="<string>")` | Validate raw document text; returns a `ValidationResult`. |
+| `validate_paths(paths)` | Validate an iterable of paths; returns `list[ValidationResult]`.       |
+| `ValidationResult`      | Has `path`, `issues`, and the `ok`, `errors`, `warnings` properties.   |
+| `Issue`                 | Frozen dataclass: `severity`, `code`, `message`, `line`.              |
+| `Severity`              | `Severity.ERROR` / `Severity.WARNING` enum.                          |
+
+The package ships a `py.typed` marker, so type checkers pick up its annotations.
 
 ## Issue codes
 
@@ -91,6 +126,15 @@ Add this step to any workflow:
 The action runs the same checks as the CLI and fails the workflow on any errors. Inputs: `paths` (default `.`), `quiet` (default `false`), `python-version` (default `3.12`).
 
 ## Development
+
+The test suite uses only the Python standard library, so you can run it without
+installing any third-party test runner:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+If you prefer pytest, it works too:
 
 ```bash
 pip install -e '.[dev]'
